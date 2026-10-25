@@ -1,3 +1,7 @@
+# make build-php            -> --pull, reuse cache when the base image is unchanged
+# make build-php FRESH=1    -> rebuild every layer (picks up apk/apt/pecl/pnpm/bun updates)
+BUILD_FLAGS = --pull $(if $(FRESH),--no-cache)
+
 PHP_REPO ?= khgtrn/php
 PHP_VERSIONS := 8.2 8.3 8.4 8.5
 PHP_TEST_COMPOSE := test/php-compose.yaml
@@ -7,7 +11,7 @@ PHP_PUSHES := $(addprefix push-php-,$(PHP_VERSIONS))
 PHP_SHELLS := $(addprefix shell-php-,$(PHP_VERSIONS))
 
 $(PHP_BUILDS): build-php-%:
-	docker build --pull --no-cache -f php/$*-fpm-alpine.Dockerfile -t $(PHP_REPO):$*-fpm-alpine php
+	docker build $(BUILD_FLAGS) -f php/$*-fpm-alpine.Dockerfile -t $(PHP_REPO):$*-fpm-alpine php
 
 $(PHP_PUSHES): push-php-%:
 	docker push $(PHP_REPO):$*-fpm-alpine
@@ -42,7 +46,7 @@ NODE_PUSHES := $(addprefix push-node-,$(NODE_VERSIONS))
 NODE_SHELLS := $(addprefix shell-node-,$(NODE_VERSIONS))
 
 $(NODE_BUILDS): build-node-%:
-	docker build --pull --no-cache -f node/$*-trixie-slim.Dockerfile -t $(NODE_REPO):$*-trixie-slim node
+	docker build $(BUILD_FLAGS) -f node/$*-trixie-slim.Dockerfile -t $(NODE_REPO):$*-trixie-slim node
 
 $(NODE_PUSHES): push-node-%:
 	docker push $(NODE_REPO):$*-trixie-slim
