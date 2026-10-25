@@ -1,0 +1,23 @@
+name: php-test
+
+x-php: &php
+  restart: "no"
+  environment:
+    TZ: Asia/Ho_Chi_Minh
+
+services:
+  php85:
+    <<: *php
+    image: khgtrn/php:8.5-fpm-alpine
+
+  php84:
+    <<: *php
+    image: khgtrn/php:8.4-fpm-alpine
+
+  php83:
+    <<: *php
+    image: khgtrn/php:8.3-fpm-alpine
+
+  php82:
+    <<: *php
+    image: khgtrn/php:8.2-fpm-alpine

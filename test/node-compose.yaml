@@ -1,0 +1,26 @@
+name: node-test
+
+x-node: &node
+  restart: "no"
+  # node images have no long-running default process; keep the container up for exec
+  command: ["sleep", "infinity"]
+  init: true
+  environment:
+    TZ: Asia/Ho_Chi_Minh
+
+services:
+  node26:
+    <<: *node
+    image: khgtrn/node:26-trixie-slim
+
+  node24:
+    <<: *node
+    image: khgtrn/node:24-trixie-slim
+
+  node22:
+    <<: *node
+    image: khgtrn/node:22-trixie-slim
+
+  node20:
+    <<: *node
+    image: khgtrn/node:20-trixie-slim
